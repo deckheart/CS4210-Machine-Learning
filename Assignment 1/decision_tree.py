@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
-# FOR: CS 4200- Assignment #1
-# TIME SPENT: how long it took you to complete the assignment
+# AUTHOR: Dakota Eckheart
+# FILENAME: decision_tree.py
+# SPECIFICATION: Create and plot decision tree using ID3 algorithm
+# FOR: CS 4210- Assignment #1
+# TIME SPENT: 30 minutes for decision_tree.py
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: DO NOT USE ANY ADVANCED PYTHON LIBRARY TO COMPLETE THIS CODE SUCH AS numpy OR pandas. You have to work here only with standard vectors and arrays
@@ -24,13 +24,33 @@ with open('contact_lens.csv', 'r') as csvfile:
          db.append (row)
          print(row)
 
-#transfor the original training features to numbers and add to the 4D array X. For instance Young = 1, Prepresbyopic = 2, Presbyopic = 3, so X = [[1, 1, 1, 1], [2, 2, 2, 2], ...]]
-#--> add your Python code here
-# X =
+#transform the original training features to numbers and add to the 4D array X. For instance Young = 1, Prepresbyopic = 2, Presbyopic = 3, so X = [[1, 1, 1, 1], [2, 2, 2, 2], ...]]
+feature_dict = {
+  'Young': 1,
+  'Presbyopic': 2,
+  'Prepresbyopic': 3,
+  'Myope': 4,
+  'Hypermetrope': 5,
+  'No': 6,
+  'Yes': 7,
+  'Reduced': 8,
+  'Normal': 9
+}
+for row in db:
+  temp_row = []
+  for i in range(len(row)-1):
+    x = feature_dict.get(row[i])
+    temp_row.append(x)
+  X.append(temp_row)
 
-#transfor the original training classes to numbers and add to the vector Y. For instance Yes = 1, No = 2, so Y = [1, 1, 2, 2, ...]
-#--> addd your Python code here
-# Y =
+
+#transform the original training classes to numbers and add to the vector Y. For instance Yes = 1, No = 2, so Y = [1, 1, 2, 2, ...]
+class_dict = {
+  'Yes': 1,
+  'No': 2
+}
+for row in db:
+  Y.append(class_dict.get(row[-1]))
 
 #fiiting the decision tree to the data
 clf = tree.DecisionTreeClassifier(criterion = 'entropy')
