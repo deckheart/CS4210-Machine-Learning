@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
-# FOR: CS 4200- Assignment #1
-# TIME SPENT: how long it took you to complete the assignment
+# AUTHOR: Dakota Eckheart
+# FILENAME: find_s.py
+# SPECIFICATION: Find maximally specific hypothesis of data set
+# FOR: CS 4210- Assignment #1
+# TIME SPENT: ~1.5 hours for find_s algorithm
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: DO NOT USE ANY ADVANCED PYTHON LIBRARY TO COMPLETE THIS CODE SUCH AS numpy OR pandas. You have to work here only with standard vectors and arrays
@@ -28,10 +28,22 @@ hypothesis = ['0'] * num_attributes #representing the most specific possible hyp
 print(hypothesis)
 
 #find the first positive training data in db and assign it to the vector hypothesis
-##--> add your Python code here
+# Looks through training data, finds the first 'Yes' class and ignores the following rows
+for row in db:
+  if row[-1] == 'Yes':
+    hypothesis = row
+    break
+
 
 #find the maximally specific hypothesis according to your training data in db and assign it to the vector hypothesis (special characters allowed: "0" and "?")
-##--> add your Python code here
+for row in db:
+  if row[-1] == 'Yes':
+    i = 0   # index to use for hypothesis list
+    for feature in row:
+      if feature != hypothesis[i]:
+        hypothesis[i] = '?'
+      i += 1
 
+hypothesis.pop()  # get rid of assigned class (the final column value)
 print("\n The Maximally Specific Hypothesis for the given training examples found by Find-S algorithm:\n")
-print(hypothesis)
+print(hypothesis) # for contact_lens, should print ['?', 'Myope', '?', '?']
