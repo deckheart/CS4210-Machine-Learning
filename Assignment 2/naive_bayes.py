@@ -58,7 +58,7 @@ playTennis_dict = {
     'No': 2
 }
 for instance in db_train:
-    Y.append(instance[-1])
+    Y.append(playTennis_dict.get(instance[-1]))
 
 #fitting the naive bayes to the data
 clf = GaussianNB()
