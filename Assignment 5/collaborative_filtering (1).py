@@ -27,7 +27,7 @@ del user100['galleries']
 del user100['restaurants']
 
 similarities = []
-#print(user100)
+r_User100 = 0
 
 #iterate over the other 99 users to calculate their similarity with the active user (user 100) according to their category ratings (user-item approach)
 for i, row in df.iterrows():
@@ -35,23 +35,29 @@ for i, row in df.iterrows():
     break   # avoid relating User 100 to themself
   vec1 = np.array([[row['dance clubs'], row['juice bars'], row['museums'], row['resorts'], row['parks/picnic spots'], row['beaches'], row['theaters'], row['religious institutions']]])
   vec2 = np.array([user100['dance clubs'], user100['juice bars'], user100['museums'], user100['resorts'], user100['parks/picnic spots'], user100['beaches'], user100['theaters'], user100['religious institutions']]).reshape(1,8)
+  
+  if i == 0:  # calculate r bar for User 100 just once
+    r_User100 = sum(vec2[0])/len(vec2[0])
 
   cs = cosine_similarity(vec1, vec2)
   similarities.append((i, cs[0][0]))
 
 #find the top 10 similar users to the active user according to the similarity calculated before
 top_ten = sorted(similarities, key=lambda t: t[1], reverse=True)[:10]
+print("(User ID, Similarity):")
 print(top_ten)
 
 #Compute a prediction from a weighted combination of selected neighbors’ for both categories evaluated (galleries and restaurants)
 galleries_weighted = []
 restaurants_weighted = []
+sum_similarities = 0
 
 for tup in top_ten:
   weighted_gallery = float(df.at[tup[0], 'galleries']) * tup[1]
   weighted_restaurant = float(df.at[tup[0], 'restaurants']) * tup[1]
+  sum_similarities += tup[1]
   galleries_weighted.append(weighted_gallery)
   restaurants_weighted.append(weighted_restaurant)
 
-print("Galleries prediction: ", str(round(sum(galleries_weighted)/len(galleries_weighted), 2)))
-print("Restaurant prediction: ", str(round(sum(restaurants_weighted)/len(restaurants_weighted), 2)))
+print("Galleries prediction: ", str(round((sum(galleries_weighted)/sum_similarities)+r_User100, 2)))
+print("Restaurants prediction: ", str(round((sum(restaurants_weighted)/sum_similarities)+r_User100, 2)))
